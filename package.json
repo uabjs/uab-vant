@@ -1,11 +1,12 @@
 {
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "pnpm --dir ./packages/vant dev",
+    "build": "pnpm --dir ./packages/vant build"
   },
   "engines": {
     "pnpm": ">= 8.8.0"
   },
   "packageManager": "pnpm@8.8.0",
-  "license": "ISC"
+  "license": "MIT"
 }

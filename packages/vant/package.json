@@ -1,0 +1,30 @@
+{
+  "name": "@uab/vant",
+  "version": "1.0.0",
+  "description": "基于 Vue3 的移动 UI 组件",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vant-cli dev",
+    "build": "vant-cli build"
+  },
+  "author": "shunyue1320",
+  "license": "MIT",
+  "keywords": [
+    "ui",
+    "vue",
+    "vue3",
+    "mobile",
+    "frontend",
+    "component",
+    "components"
+  ],
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.3",
+    "@vant/cli": "^6.2.0",
+    "vue": "^3.3.6",
+    "typescript": "^5.0.4"
+  }
+}
