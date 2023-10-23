@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "pnpm": ">= 8.8.0"
+  },
+  "packageManager": "pnpm@8.8.0",
+  "license": "ISC"
+}
