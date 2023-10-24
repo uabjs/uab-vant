@@ -1,5 +1,6 @@
-import Button from './Button';
+import _Button from './Button';
 
+export const Button = _Button;
 export default Button;
 
 declare module 'vue' {
