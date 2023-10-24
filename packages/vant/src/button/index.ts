@@ -1,6 +1,7 @@
+import { withInstall } from '../utils';
 import _Button from './Button';
 
-export const Button = _Button;
+export const Button = withInstall(_Button);
 export default Button;
 
 declare module 'vue' {
