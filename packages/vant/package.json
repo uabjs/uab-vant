@@ -2,6 +2,7 @@
   "name": "@uab/vant",
   "version": "1.0.0",
   "description": "基于 Vue3 的移动 UI 组件",
+  "private": true,
   "main": "lib/vant.cjs.js",
   "module": "es/index.mjs",
   "style": "lib/index.css",
