@@ -1,15 +1,27 @@
-import { CSSProperties, defineComponent } from 'vue';
-import { extend, numericProp, makeStringProp } from "../utils";
+import {
+  defineComponent,
+  type CSSProperties,
+  type ExtractPropTypes,
+} from 'vue';
 
-const name = 'van-button'
+// 一些公用的方法
+import {
+  extend,
+  numericProp,
+  makeStringProp, 
+  createNamespace,
+  BORDER_SURROUND,
+} from "../utils";
 
-// Types
+// button 组件的类型
 import {
   ButtonSize,
   ButtonType,
   ButtonNativeType,
   ButtonIconPosition,
 } from './types';
+
+const [name, bem] = createNamespace('button');
 
 export const buttonProps = extend({}, {
   tag: makeStringProp<keyof HTMLElementTagNameMap>('button'),
@@ -32,6 +44,8 @@ export const buttonProps = extend({}, {
   loadingType: String,
   iconPosition: makeStringProp<ButtonIconPosition>('left'),
 })
+
+export type ButtonProps = ExtractPropTypes<typeof buttonProps>
 
 export default defineComponent({
   name,
@@ -65,8 +79,10 @@ export default defineComponent({
       }
     }
 
-    const rendertext = () => {
+    const renderText = () => {
       let text;
+
+      // 如果在 loading 按钮的文字就显示 loading 文字
       if (props.loading) {
         text = props.loadingText
       } else {
@@ -74,7 +90,7 @@ export default defineComponent({
       }
 
       if (text) {
-        return <span>{text}</span>
+        return <span class={bem('text')}>{text}</span>
       }
     }
 
@@ -106,11 +122,52 @@ export default defineComponent({
     };
 
     return () => {
-      const { tag } = props
+      const { 
+        tag,
+        type,
+        size,
+        plain,
+        block,
+        round,
+        square,
+        loading,
+        disabled,
+        hairline,
+        nativeType,
+        iconPosition,
+      } = props
+
+      // 通过属性得到需要使用的 class 样式
+      const classes = [
+        bem([
+          type,
+          size,
+          {
+            plain,
+            block,
+            round,
+            square,
+            loading,
+            disabled,
+            hairline,
+          }
+        ]),
+        // 使用 0.5px 边框
+        { [BORDER_SURROUND]: hairline },
+      ]
+
       return (
-        <tag>
-          <div onClick={onClick}>
-            {slots?.default?.()}
+        <tag
+          type={nativeType} // 原生 button 标签属性
+          class={classes}   // class 样式
+          style={getStyle()}  // css 内联样式
+          disabled={disabled} // 是否禁用
+          onClick={onClick}   // button 组件点击事件
+        >
+          <div class={bem('content')}>
+            {iconPosition === 'left' && renderIcon()}
+            {renderText()}
+            {iconPosition === 'right' && renderIcon()}
           </div>
         </tag>
       );
