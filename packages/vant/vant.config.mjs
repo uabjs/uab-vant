@@ -66,6 +66,15 @@ export default {
                 title: 'Style 内置样式',
               },
             ]
+          },
+          {
+            title: '展示组件',
+            items: [
+              {
+                path: 'badge',
+                title: 'Badge 徽标',
+              },
+            ]
           }
         ]
       },
@@ -110,6 +119,15 @@ export default {
               {
                 path: 'style',
                 title: 'Built-in style',
+              },
+            ]
+          },
+          {
+            title: 'Display Components',
+            items: [
+              {
+                path: 'badge',
+                title: 'Badge',
               },
             ]
           }

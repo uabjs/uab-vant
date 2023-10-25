@@ -1,6 +1,15 @@
 // 基本的方法
 export const extend = Object.assign;
 
+/** 是浏览器 */
+export const inBrowser = typeof window !== 'undefined';
+
+export type Numeric = number | string;
+
+/** 是数字 */
+export const isNumeric = (val: Numeric): val is string =>
+  typeof val === 'number' || /^\d+(\.\d+)?$/.test(val);
+
 /** 是对象 */
 export const isObject = (val: unknown): val is Record<any, any> =>
   val !== null && typeof val === 'object';
