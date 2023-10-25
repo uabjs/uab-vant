@@ -2,10 +2,30 @@
   "name": "@uab/vant",
   "version": "1.0.0",
   "description": "基于 Vue3 的移动 UI 组件",
-  "main": "index.js",
+  "main": "lib/vant.cjs.js",
+  "module": "es/index.mjs",
+  "style": "lib/index.css",
+  "typings": "lib/index.d.ts",
+  "unpkg": "lib/vant.min.js",
+  "jsdelivr": "lib/vant.min.js",
+  "files": [
+    "es",
+    "lib"
+  ],
   "scripts": {
     "dev": "vant-cli dev",
-    "build": "vant-cli build"
+    "build": "vant-cli build",
+    "build:site": "vant-cli build-site",
+    "release": "cp ../../README.md ./ && vant-cli release && rm ./README.md",
+    "release:site": "pnpm build:site && npx gh-pages -d site-dist --add"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uabjs/uab-vant.git",
+    "directory": "packages/vant"
   },
   "author": "shunyue1320",
   "license": "MIT",
@@ -28,6 +48,7 @@
     "@types/node": "^18.16.3",
     "@vant/cli": "^6.2.0",
     "@vant/icons": "^3.0.2",
+    "typescript": "^5.0.4",
     "vue": "^3.3.6",
     "vue-router": "^4.1.6"
   }
