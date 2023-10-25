@@ -5,3 +5,51 @@
  
 @import './css-variables.less';
 @import './normalize.less';
+@import './mixins/hairline.less';
+
+
+[class*='van-hairline'] {
+  &::after {
+    .hairline();
+  }
+}
+
+// 1px 边框
+.van-hairline {
+  &,
+  &--top,
+  &--left,
+  &--right,
+  &--bottom,
+  &--surround,
+  &--top-bottom {
+    position: relative;
+  }
+
+  &--top::after {
+    border-top-width: var(--van-border-width);
+  }
+
+  &--left::after {
+    border-left-width: var(--van-border-width);
+  }
+
+  &--right::after {
+    border-right-width: var(--van-border-width);
+  }
+
+  &--bottom::after {
+    border-bottom-width: var(--van-border-width);
+  }
+
+  &,
+  &-unset {
+    &--top-bottom::after {
+      border-width: var(--van-border-width) 0;
+    }
+  }
+
+  &--surround::after {
+    border-width: var(--van-border-width);
+  }
+}

@@ -12,7 +12,7 @@ type EventShim = {
 }
 
 export type WithInstall<T> = T & {
-  withInstall(app: App): void;
+  install(app: App): void;
 } & EventShim
 
 export function withInstall<T extends Component>(options: T) {

@@ -18,6 +18,9 @@
     "component",
     "components"
   ],
+  "dependencies": {
+    "@vant/use": "^1.6.0"
+  },
   "peerDependencies": {
     "vue": "^3.0.0"
   },
@@ -25,6 +28,6 @@
     "@types/node": "^18.16.3",
     "@vant/cli": "^6.2.0",
     "vue": "^3.3.6",
-    "typescript": "^5.0.4"
+    "vue-router": "^4.1.6"
   }
 }

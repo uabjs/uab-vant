@@ -1,2 +1,27 @@
 // 基本的方法
 export const extend = Object.assign;
+
+/** 是对象 */
+export const isObject = (val: unknown): val is Record<any, any> =>
+  val !== null && typeof val === 'object';
+
+/** 是定义的变量 */
+export const isDef = <T>(val: T): val is NonNullable<T> =>
+  val !== undefined && val !== null;
+
+  
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const isFunction = (val: unknown): val is Function =>
+typeof val === 'function';
+
+/** 取对象深处的某个值，不报错 */
+export function get(object: any, path: string): any {
+  const keys = path.split('.');
+  let result = object;
+
+  keys.forEach((key) => {
+    result = isObject(result) ? result[key] ?? '' : '';
+  });
+
+  return result;
+}

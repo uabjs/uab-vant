@@ -1,8 +1,22 @@
+import { get, isFunction } from './basic';
+import { camelize } from './format';
+import locale from '../locale';
 
+export function createTranslate(name: string) {
+  const prefix = camelize(name) + '.';
+
+  return (path: string, ...args: unknown[]) => {
+    const messages = locale.messages();
+    const message = get(messages, prefix + path) || get(messages, path);
+
+    return isFunction(message) ? message(...args) : message;
+  }
+}
+
+export type translate = ReturnType<typeof createTranslate>
 
 export type Mod = string | { [key: string]: any }
 export type Mods = Mod | Mod[]
-
 
 function genBem(name: string, mods?: Mods): string {
   if (!mods) {

@@ -20,7 +20,7 @@ export default {
     },
   },
   site: {
-    defaultLang: 'zh-CN',
+    defaultLang: 'en-US',
     darkModeClass: 'van-theme-dark',
     lightModeClass: 'van-theme-light',
     locales: {
@@ -56,6 +56,10 @@ export default {
               {
                 path: 'button',
                 title: 'Button 按钮',
+              },
+              {
+                path: 'style',
+                title: 'Style 内置样式',
               },
             ]
           }
@@ -94,6 +98,10 @@ export default {
               {
                 path: 'button',
                 title: 'Button',
+              },
+              {
+                path: 'style',
+                title: 'Built-in style',
               },
             ]
           }
