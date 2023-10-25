@@ -48,6 +48,10 @@ export default {
                 path: 'quickstart',
                 title: '快速上手',
               },
+              {
+                path: 'locale',
+                title: '国际化',
+              },
             ]
           },
           {
@@ -89,6 +93,10 @@ export default {
               {
                 path: 'quickstart',
                 title: 'Quickstart',
+              },
+              {
+                path: 'locale',
+                title: 'Internationalization',
               },
             ]
           },
