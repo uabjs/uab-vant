@@ -62,6 +62,10 @@ export default {
                 title: 'Button 按钮',
               },
               {
+                path: 'icon',
+                title: 'Icon 图标',
+              },
+              {
                 path: 'style',
                 title: 'Style 内置样式',
               },
@@ -115,6 +119,10 @@ export default {
               {
                 path: 'button',
                 title: 'Button',
+              },
+              {
+                path: 'icon',
+                title: 'Icon',
               },
               {
                 path: 'style',
