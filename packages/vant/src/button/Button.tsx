@@ -13,6 +13,9 @@ import {
   BORDER_SURROUND,
 } from "../utils";
 
+// 需要使用的组件
+import { Icon } from '../icon';
+
 // button 组件的类型
 import {
   ButtonSize,
@@ -74,7 +77,11 @@ export default defineComponent({
 
       if (props.icon) {
         return (
-          <div>icon</div>
+          <Icon
+            name={props.icon}
+            class={bem('icon')}
+            classPrefix={props.iconPrefix}
+          />
         )
       }
     }
