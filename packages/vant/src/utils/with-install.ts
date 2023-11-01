@@ -15,10 +15,12 @@ export type WithInstall<T> = T & {
   install(app: App): void;
 } & EventShim
 
+/** 给组件添加一个 install 方法这样可以使用 vue.use 去注册组件 */
 export function withInstall<T extends Component>(options: T) {
   (options as Record<string, unknown>).install = (app: App) => {
     const { name } = options
     if (name) {
+      // 如：button 组件会注册 van-button 和 VanButton 两种名字的组件
       app.component(name, options);
       app.component(camelize(`-${name}`), options)
     }
