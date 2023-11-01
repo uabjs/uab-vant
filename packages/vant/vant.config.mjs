@@ -62,6 +62,10 @@ export default {
                 title: 'Button 按钮',
               },
               {
+                path: 'cell',
+                title: 'Cell 单元格',
+              },
+              {
                 path: 'icon',
                 title: 'Icon 图标',
               },
@@ -119,6 +123,10 @@ export default {
               {
                 path: 'button',
                 title: 'Button',
+              },
+              {
+                path: 'cell',
+                title: 'Cell',
               },
               {
                 path: 'icon',
