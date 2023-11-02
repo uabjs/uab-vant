@@ -1,9 +1,10 @@
 import { ExtractPropTypes, defineComponent, type PropType, ref } from "vue";
 import Cell, { cellSharedProps } from "../cell/Cell";
-import { createNamespace, extend, isDef, makeNumericProp, makeStringProp, numericProp } from "../utils";
+import { createNamespace, extend, isDef, makeNumericProp, makeStringProp, numericProp, unknownProp } from "../utils";
 import { FieldTextAlign, FieldType } from "./types";
 import { userId } from "../composables/use-id";
 import { mapInputType } from "./utils";
+import { preventDefault } from "../utils/dom";
 
 
 const [name, bem] = createNamespace('field');
@@ -21,6 +22,7 @@ export const fieldSharedProps = {
 export const fieldProps = extend({}, cellSharedProps, fieldSharedProps, {
   type: makeStringProp<FieldType>('text'),
   labelWidth: numericProp,
+  labelClass: unknownProp,
   labelAlign: String as PropType<FieldTextAlign>,
   colon: {
     type: Boolean,
@@ -49,6 +51,8 @@ export default defineComponent({
       }
     }
 
+    const focus = () => inputRef.value?.focus();
+
     const renderLabel = () => {
       const labelWidth = getProp('labelWidth');
       const labelAlign = getProp('labelAlign');
@@ -64,7 +68,15 @@ export default defineComponent({
         return (
           <label
             id={`${id}-label`}
+            //  作用：添加 for 属性点击光标聚焦到输入框（for属性是 input 的 id 属性）
+            for={slots.input ? undefined : getInputId()}
+            onClick={(event: MouseEvent) => {
+              // 解决：van-field组件在点击label位置时，绑定的click事件会执行两次
+              preventDefault(event);
+              focus(); // 点击光标聚焦到输入框（兜底）
+            }}
           >
+            {/* 标题 + ":"冒号 */}
             {props.label + colon}
           </label>
         )
@@ -90,6 +102,8 @@ export default defineComponent({
         id: getInputId(),
         ref: inputRef,
         name: props.name,
+        class: controlClass,
+        placeholder: props.placeholder,
       }
 
       // 使用原生的 input 标签，将属性传入进去
@@ -119,6 +133,10 @@ export default defineComponent({
             value: renderFieldBody,
           }}
           valueClass={bem('value')}
+          titleClass={[
+            bem('label', [labelAlign, { required: props.required }]),
+            props.labelClass,
+          ]}
         />
         </div>
       )

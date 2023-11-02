@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import VanField from '..';
 import VanCellGroup from '../../cell-group';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useTranslate } from '../../../docs/site';
 
 console.log("VanField========", VanField)
@@ -18,6 +18,9 @@ const t = useTranslate({
 });
 
 const value = ref('');
+watch(value, (now, old) => {
+  console.log("new, old=====", now, old)
+})
 </script>
 
 <template>
