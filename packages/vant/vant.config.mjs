@@ -76,6 +76,15 @@ export default {
             ]
           },
           {
+            title: '表单组件',
+            items: [
+              {
+                path: 'field',
+                title: 'Field 输入框',
+              },
+            ]
+          },
+          {
             title: '展示组件',
             items: [
               {
@@ -135,6 +144,15 @@ export default {
               {
                 path: 'style',
                 title: 'Built-in style',
+              },
+            ]
+          },
+          {
+            title: 'Form Components',
+            items: [
+              {
+                path: 'field',
+                title: 'Field',
               },
             ]
           },
