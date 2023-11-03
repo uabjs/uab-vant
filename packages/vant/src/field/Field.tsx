@@ -1,7 +1,7 @@
 import { ExtractPropTypes, defineComponent, type PropType, ref } from "vue";
 import Cell, { cellSharedProps } from "../cell/Cell";
 import { createNamespace, extend, isDef, makeNumericProp, makeStringProp, numericProp, unknownProp } from "../utils";
-import { FieldTextAlign, FieldType } from "./types";
+import { FieldFormatTrigger, FieldTextAlign, FieldType } from "./types";
 import { userId } from "../composables/use-id";
 import { mapInputType } from "./utils";
 import { preventDefault } from "../utils/dom";
@@ -83,6 +83,22 @@ export default defineComponent({
       }
     }
 
+    const updateValue = (
+      value: string,
+      trigger: FieldFormatTrigger = 'onChange',
+    ) => {
+      if (value !== props.modelValue) {
+        emit('update:modelValue', value)
+      }
+    }
+
+    const onInput = (event: Event) => {
+      // composing 是一个布尔值，用于指示正在进行IME（输入法编辑）组合的文本处理中是否存在未完成的字符。
+      if (!event.target!.composing) {
+        updateValue((event.target as HTMLInputElement).value)
+      }
+    }
+
     const renderInput = () => {
       const controlClass = bem('control', [
         getProp('inputAlign'),
@@ -104,6 +120,7 @@ export default defineComponent({
         name: props.name,
         class: controlClass,
         placeholder: props.placeholder,
+        onInput,
       }
 
       // 使用原生的 input 标签，将属性传入进去

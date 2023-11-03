@@ -34,6 +34,7 @@ export type FieldTextAlign = 'left' | 'center' | 'right' | 'top';
 
 export type FieldClearTrigger = 'always' | 'focus';
 
+/** 触发格式化的监听方法 */
 export type FieldFormatTrigger = 'onBlur' | 'onChange';
 
 export type FieldValidateTrigger = 'onBlur' | 'onChange' | 'onSubmit';

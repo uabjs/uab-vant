@@ -4,8 +4,6 @@ import VanCellGroup from '../../cell-group';
 import { ref, watch } from 'vue';
 import { useTranslate } from '../../../docs/site';
 
-console.log("VanField========", VanField)
-
 const t = useTranslate({
   'zh-CN': {
     label: '文本',
@@ -18,9 +16,6 @@ const t = useTranslate({
 });
 
 const value = ref('');
-watch(value, (now, old) => {
-  console.log("new, old=====", now, old)
-})
 </script>
 
 <template>
