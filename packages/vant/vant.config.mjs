@@ -1,5 +1,5 @@
 export default {
-  name: 'vant',
+  name: 'uab vant',
   build: {
     srcDir: 'src',
     tagPrefix: 'van-',
@@ -25,7 +25,7 @@ export default {
     lightModeClass: 'van-theme-light',
     locales: {
       'zh-CN': {
-        title: 'Vant',
+        title: 'Uab Vant',
         subtitle: '（适用于 Vue 3）',
         description: '轻量、可定制的移动端组件库',
         logo: 'https://fastly.jsdelivr.net/npm/@vant/assets/logo.png',
@@ -81,6 +81,10 @@ export default {
               {
                 path: 'field',
                 title: 'Field 输入框',
+              },
+              {
+                path: 'form',
+                title: 'Form 表单',
               },
             ]
           },
@@ -153,6 +157,10 @@ export default {
               {
                 path: 'field',
                 title: 'Field',
+              },
+              {
+                path: 'form',
+                title: 'Form',
               },
             ]
           },

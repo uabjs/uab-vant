@@ -1,11 +1,10 @@
-
+import { defineComponent, type ExtractPropTypes, type PropType } from 'vue';
+import { useChildren } from '@vant/use';
 
 // Utils
-import { defineComponent, type ExtractPropTypes, type PropType } from 'vue';
 import { createNamespace, FORM_KEY, numericProp } from '../utils';
 import { FieldValidateTrigger } from '../field';
 import { preventDefault } from '../utils/dom';
-import { useChildren } from '@vant/use';
 
 const [name, bem] = createNamespace('form');
 
@@ -30,17 +29,20 @@ export default defineComponent({
   props: formProps,
   emits: ['submit', 'failed'],
   setup(props, { emit, slots }) {
+    // 获取所有子组件
     const { children, linkChildren } = useChildren(FORM_KEY);
 
     /** 获取所有子 field 输入框的值 */
-    const getValues = () => {
-      children.reduce<Record<string, unknown>>
-    }
+    const getValues = () => children.reduce<Record<string, unknown>>((form, field) => {
+      if (field.name !== undefined) {
+        form[field.name] = field.formValue.value
+      }
+      return form
+    }, {})
 
     const submit = () => {
       const values = getValues()
-
-      // validate().
+      emit('submit', values)
     }
 
 
@@ -49,12 +51,11 @@ export default defineComponent({
       submit();
     }
 
-
-    return () => {
+    return () => (
       <form class={bem()} onSubmit={onSubmit}>
         {/* 插槽内容: 内部输入框 */}
         {slots.default?.()}
       </form>
-    }
+    )
   }
 })
