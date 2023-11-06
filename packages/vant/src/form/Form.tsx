@@ -51,6 +51,10 @@ export default defineComponent({
       submit();
     }
 
+    // 内部通过 provide 注入 from 参数给 Field 子组件: provide(FORM_KEY, { link, unlink, children, internalChildren, ...props })
+    // 每个 Field 子组件将自己的 实例添加到 children, internalChildren 中，后续点击提交通过 children[i].formValue 去拿到各个 Field 子组件内的 value
+    linkChildren({ props });
+
     return () => (
       <form class={bem()} onSubmit={onSubmit}>
         {/* 插槽内容: 内部输入框 */}

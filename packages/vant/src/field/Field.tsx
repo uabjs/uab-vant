@@ -1,7 +1,10 @@
-import { ExtractPropTypes, defineComponent, type PropType, ref } from "vue";
+import { ExtractPropTypes, defineComponent, type PropType, ref, computed } from "vue";
+import { useParent } from "@vant/use";
+
 import Cell, { cellSharedProps } from "../cell/Cell";
-import { createNamespace, extend, isDef, makeNumericProp, makeStringProp, numericProp, unknownProp } from "../utils";
-import { FieldFormatTrigger, FieldTextAlign, FieldType } from "./types";
+import { createNamespace, extend, isDef, makeNumericProp, makeStringProp, numericProp, unknownProp, FORM_KEY } from "../utils";
+import { FieldExpose, FieldFormatTrigger, FieldTextAlign, FieldType } from "./types";
+import { useExpose } from '../composables/use-expose';
 import { userId } from "../composables/use-id";
 import { mapInputType } from "./utils";
 import { preventDefault } from "../utils/dom";
@@ -45,11 +48,18 @@ export default defineComponent({
     
     const inputRef = ref<HTMLInputElement>();
 
+    // 内部通过 inject(FORM_KEY) 拿到 form 父组件注入的 props 参数 { link, unlink, children, internalChildren, ...props }。并且使用 link 方法将自身 instance 实例添加到 children, internalChildren 中
+    const { parent: form } = useParent(FORM_KEY);
+
     const getProp = (key) => {
       if (isDef(props[key])) {
         return props[key]
       }
     }
+
+    const formValue = computed(() => {
+      return props.modelValue;
+    })
 
     const focus = () => inputRef.value?.focus();
 
@@ -87,6 +97,9 @@ export default defineComponent({
       value: string,
       trigger: FieldFormatTrigger = 'onChange',
     ) => {
+
+
+      // 发射事件给外层的 v-model 接收
       if (value !== props.modelValue) {
         emit('update:modelValue', value)
       }
@@ -132,6 +145,10 @@ export default defineComponent({
         {renderInput()}
       </div>
     ]
+
+    useExpose<FieldExpose>({
+      formValue,
+    })
 
 
     return () => {
