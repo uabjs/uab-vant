@@ -3,7 +3,7 @@ import { useChildren } from '@vant/use';
 
 // Utils
 import { createNamespace, FORM_KEY, numericProp } from '../utils';
-import { FieldValidateTrigger } from '../field';
+import { FieldValidateError, FieldValidateTrigger } from '../field';
 import { preventDefault } from '../utils/dom';
 
 const [name, bem] = createNamespace('form');
@@ -40,9 +40,72 @@ export default defineComponent({
       return form
     }, {})
 
+    const getFieldsByNames = (names?: string[]) => {
+      // 过滤掉不需要校验的 field 子组件
+      if (names) {
+        return children.filter((field) => names.includes(field.name))
+      }
+
+      // 返回所有的 field 子组件
+      return children
+    }
+
+
+    /** 执行所有 field 子组件内部的 validate 校验方法， 执行校验方法校验填写的内容是否合格  */
+    const validateAll = (names?: string[]) => {
+      return new Promise<void>((resolve, reject) => {
+        const fields = getFieldsByNames(names);
+        Promise.all(fields.map((item) => item.validate())).then((errors) => {
+          errors = errors.filter(Boolean); // 过滤掉一些空值
+
+          if (errors.length) {
+            reject(errors)
+          } else {
+            resolve()
+          }
+        })
+      })
+    }
+
+    /** 通过 name 获取到对应 field 子组件内部的 validate 校验方法， 执行校验方法校验填写的内容是否合格 */
+    const validateField = (name: string) => {
+      const matched = children.find((item) => item.name === name);
+      if (matched) {
+        return new Promise<void>((resolve, reject) => {
+          // 执行每个
+          matched.validate().then((error?: FieldValidateError) => {
+            if (error) {
+              reject(error)
+            } else {
+              resolve()
+            }
+          })
+        })
+      }
+
+      // 读取不到 name 对应的 field 子组件默认返回 reject
+      return Promise.reject()
+    }
+
+    /** 校验 form 表单下面的 field 子组件内容是否符合规则 */
+    const validate = (name?: string | string[]) => {
+      // 指定单个 field 子组件校验
+      if (typeof name === 'string') {
+        return validateField(name)
+      }
+
+      // 校验所有的填写规则
+      return validateAll(name)
+    }
+
     const submit = () => {
       const values = getValues()
-      emit('submit', values)
+
+      validate()
+        .then(() => emit('submit', values))
+        .catch((errors: FieldValidateError[]) => {
+          emit('failed', { values, errors });
+        })
     }
 
 

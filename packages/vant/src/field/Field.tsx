@@ -1,12 +1,12 @@
-import { ExtractPropTypes, defineComponent, type PropType, ref, computed } from "vue";
+import { ExtractPropTypes, defineComponent, type PropType, ref, computed, reactive } from "vue";
 import { useParent } from "@vant/use";
 
 import Cell, { cellSharedProps } from "../cell/Cell";
 import { createNamespace, extend, isDef, makeNumericProp, makeStringProp, numericProp, unknownProp, FORM_KEY } from "../utils";
-import { FieldExpose, FieldFormatTrigger, FieldTextAlign, FieldType } from "./types";
+import { FieldExpose, FieldFormatTrigger, FieldRule, FieldTextAlign, FieldType, FieldValidateError, FieldValidationStatus } from "./types";
 import { useExpose } from '../composables/use-expose';
 import { userId } from "../composables/use-id";
-import { mapInputType } from "./utils";
+import { mapInputType, isEmptyValue } from "./utils";
 import { preventDefault } from "../utils/dom";
 
 
@@ -40,11 +40,18 @@ export default defineComponent({
   name,
   props: fieldProps,
   emits: [
+    'endValidate',
+    'startValidate',
     'update:modelValue',
   ],
   setup(props, { emit, slots }) {
     const id = userId();
     const getInputId = () => props.id || `${id}-input`;
+    const state = reactive({
+      status: 'unvalidated' as FieldValidationStatus,
+      focused: false,
+      validateMessage: '',
+    })
     
     const inputRef = ref<HTMLInputElement>();
 
@@ -60,6 +67,83 @@ export default defineComponent({
     const formValue = computed(() => {
       return props.modelValue;
     })
+
+
+    const runRules = (rules: FieldRule[]) => {
+      return rules.reduce(
+        (promise, rule) => {
+          return promise.then(() => {
+            // 如果已经校验失败了就不往下校验了
+            if (state.status === 'failed') {
+              return;
+            }
+
+            let { value } = formValue;
+
+            // 用户传入的格式化函数，将表单项的值转换后进行校验
+            if (rule.formatter) {
+              value = rule.formatter(value, rule);
+            }
+
+            // if (!runSyncRule(value, rule)) {
+            //   state.status = 'failed';
+
+            // }
+
+            if (rule.validator) {
+              if (isEmptyValue(value) && rule.validateEmpty === false) {
+                return
+              }
+            }
+
+          })
+        },
+        Promise.resolve(),
+      )
+    }
+
+
+    /** 重置输入框下面的错误提示内容 */
+    const resetValidation = () => {
+      state.status = 'unvalidated';
+      state.validateMessage = '';
+    }
+
+    /** 返回规则校验的状态 */
+    const endValidate = () => {
+      emit('endValidate', {
+        status: state.status,
+        message: state.validateMessage,
+      });
+    }
+
+
+    const validate = (rules = props.rules) => {
+      return new Promise<FieldValidateError | void>((resolve) => {
+        resetValidation();
+
+        // 存在规则就执行所有规则
+        if (rules) {
+          emit('startValidate') // 发射事件通知父级开始校验
+          runRules(rules).then(() => {
+            if (state.status === 'failed') {
+              resolve({
+                name: props.name,
+                message: state.validateMessage,
+              })
+              endValidate();
+            } else {
+              state.status = 'passed';
+              resolve();
+              endValidate();
+            }
+          })
+        } else {
+          // 不存在规则就返回成功
+          resolve()
+        }
+      })
+    }
 
     const focus = () => inputRef.value?.focus();
 
@@ -147,6 +231,7 @@ export default defineComponent({
     ]
 
     useExpose<FieldExpose>({
+      validate,
       formValue,
     })
 

@@ -1,6 +1,18 @@
 import { HTMLAttributes, InputHTMLAttributes } from "vue";
 import type { FieldType } from './types';
 
+
+/** 是否是空 */
+export function isEmptyValue(value: unknown) {
+  if (Array.isArray(value)) {
+    return !value.length
+  }
+  if (value === 0) {
+    return false
+  }
+  return !value;
+}
+
 /** input 输入框类型兼容 */
 export function mapInputType(type: FieldType): {
   type: InputHTMLAttributes['type']; // 输入
