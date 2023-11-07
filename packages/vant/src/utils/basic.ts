@@ -20,8 +20,12 @@ export const isDef = <T>(val: T): val is NonNullable<T> =>
 
   
 // eslint-disable-next-line @typescript-eslint/ban-types
-export const isFunction = (val: unknown): val is Function =>
-typeof val === 'function';
+export const isFunction = (val: unknown): val is Function => typeof val === 'function';
+
+
+export const isPromise = <T = any>(val: unknown): val is Promise<T> =>
+  isObject(val) && isFunction(val.then) && isFunction(val.catch)
+
 
 /** 取对象深处的某个值，不报错 */
 export function get(object: any, path: string): any {

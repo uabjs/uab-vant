@@ -2,7 +2,7 @@ import { defineComponent, type ExtractPropTypes, type PropType } from 'vue';
 import { useChildren } from '@vant/use';
 
 // Utils
-import { createNamespace, FORM_KEY, numericProp } from '../utils';
+import { createNamespace, FORM_KEY, numericProp, truthProp } from '../utils';
 import { FieldValidateError, FieldValidateTrigger } from '../field';
 import { preventDefault } from '../utils/dom';
 
@@ -13,6 +13,7 @@ export const formProps = {
   disabled: Boolean,
   readonly: Boolean,
   labelWidth: numericProp,
+  showErrorMessage: truthProp, // 是否显示错误提示
   // 表单校验触发时机，可选值为 onChange、onSubmit，支持通过数组同时设置多个值，具体用法见下方表格
   validateTrigger: {
     type: [String, Array] as PropType<

@@ -6,7 +6,7 @@ import { createNamespace, extend, isDef, makeNumericProp, makeStringProp, numeri
 import { FieldExpose, FieldFormatTrigger, FieldRule, FieldTextAlign, FieldType, FieldValidateError, FieldValidationStatus } from "./types";
 import { useExpose } from '../composables/use-expose';
 import { userId } from "../composables/use-id";
-import { mapInputType, isEmptyValue } from "./utils";
+import { mapInputType, isEmptyValue, runSyncRule, getRuleMessage, runRuleValidator } from "./utils";
 import { preventDefault } from "../utils/dom";
 
 
@@ -18,12 +18,14 @@ export const fieldSharedProps = {
   name: String,
   modelValue: makeNumericProp(''),
   placeholder: String,
+  errorMessage: String,
 }
 
 
 // 输入框覆盖继承单元格参数
 export const fieldProps = extend({}, cellSharedProps, fieldSharedProps, {
   type: makeStringProp<FieldType>('text'),
+  rules: Array as PropType<FieldRule[]>,
   labelWidth: numericProp,
   labelClass: unknownProp,
   labelAlign: String as PropType<FieldTextAlign>,
@@ -80,22 +82,35 @@ export default defineComponent({
 
             let { value } = formValue;
 
-            // 用户传入的格式化函数，将表单项的值转换后进行校验
+            // 用户传入的格式化函数，将表单项的值转换后再进行校验
             if (rule.formatter) {
               value = rule.formatter(value, rule);
             }
 
-            // if (!runSyncRule(value, rule)) {
-            //   state.status = 'failed';
+            // 进行 required 和 pattern 校验,校验失败返回 false, 通过返回 true
+            if (!runSyncRule(value, rule)) {
+              state.status = 'failed';
+              state.validateMessage = getRuleMessage(value, rule);
+              return;
+            }
 
-            // }
-
+            // 通过函数进行校验，可以返回一个 Promise 来进行异步校验
             if (rule.validator) {
               if (isEmptyValue(value) && rule.validateEmpty === false) {
                 return
               }
-            }
 
+              // 执行用户传入的 validator 校验函数, 返回字符串则校验失败, 字符串作为显示 message 提示
+              return runRuleValidator(value, rule).then((result) => {
+                if (result && typeof result === 'string') {
+                  state.status = 'failed'
+                  state.validateMessage = result
+                } else if (result === false) { // 返回 fasle 说明校验失败需要给错误提示
+                  state.status = 'failed'
+                  state.validateMessage = getRuleMessage(value, rule)
+                }
+              })
+            }
           })
         },
         Promise.resolve(),
@@ -146,6 +161,27 @@ export default defineComponent({
     }
 
     const focus = () => inputRef.value?.focus();
+
+
+    const renderMessage = () => {
+      // 父级 form 表单可以决定是否显示错误提示
+      if (form && form.props.showErrorMessage === false) {
+        return
+      }
+
+      // 用户传入了错误提示则显示用户的 [自我感悟: 我个人感觉这个错误提示给用户自定义的自由度太大了, errorMessage参数, rule.message, rule.validator的返回值 这3个地方都能决定这个 message 提示的内容, 一个功能能实现的方式越多,用户使用方式就越杂乱, 用户搜索一个问题就会有多个结果增加了用户的学习成本, 苹果一贯的设计原则就是我教你这么用你就应该这么用,如果多条路都能到达终点就会给用户选择,选择是繁琐的是浪费时间的]
+      const message = props.errorMessage || state.validateMessage;
+
+      if (message) {
+        const slot = slots['error-message'] // 错误插槽 有插槽显示插槽没有显示 message 提示
+        const errorMessageAlign = getProp('errorMessageAlign') // 错误提示文案对齐方式，可选值为 center right
+        return (
+          <div class={bem('error-message', errorMessageAlign)}>
+            {slot ? slot({ message }): message}
+          </div>
+        )
+      }
+    }
 
     const renderLabel = () => {
       const labelWidth = getProp('labelWidth');
@@ -227,7 +263,8 @@ export default defineComponent({
     const renderFieldBody = () => [
       <div class={bem('body')}>
         {renderInput()}
-      </div>
+      </div>,
+      renderMessage(),
     ]
 
     useExpose<FieldExpose>({
