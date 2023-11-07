@@ -1,6 +1,6 @@
 import { HTMLAttributes, InputHTMLAttributes } from "vue";
 import type { FieldRule, FieldType } from './types';
-import { isFunction } from "../utils";
+import { isFunction, isPromise } from "../utils";
 
 
 /** 是否是空 */
@@ -83,4 +83,14 @@ export function mapInputType(type: FieldType): {
   }
 
   return { type }
+}
+
+/** 字符串或含表情符号的长度 */
+export function getStringLength(str: string) {
+  return [...str].length
+}
+
+/** 截断导出长度的表情符号 */
+export function cutString(str: string, maxlength: number) {
+  return [...str].slice(0, maxlength).join('');
 }

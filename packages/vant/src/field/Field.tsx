@@ -1,12 +1,12 @@
-import { ExtractPropTypes, defineComponent, type PropType, ref, computed, reactive } from "vue";
+import { ExtractPropTypes, defineComponent, type PropType, ref, computed, reactive, watch } from "vue";
 import { useParent } from "@vant/use";
 
 import Cell, { cellSharedProps } from "../cell/Cell";
-import { createNamespace, extend, isDef, makeNumericProp, makeStringProp, numericProp, unknownProp, FORM_KEY } from "../utils";
+import { createNamespace, extend, isDef, makeNumericProp, makeStringProp, numericProp, unknownProp, FORM_KEY, toArray } from "../utils";
 import { FieldExpose, FieldFormatTrigger, FieldRule, FieldTextAlign, FieldType, FieldValidateError, FieldValidationStatus } from "./types";
 import { useExpose } from '../composables/use-expose';
 import { userId } from "../composables/use-id";
-import { mapInputType, isEmptyValue, runSyncRule, getRuleMessage, runRuleValidator } from "./utils";
+import { mapInputType, isEmptyValue, runSyncRule, getRuleMessage, runRuleValidator, getStringLength, cutString } from "./utils";
 import { preventDefault } from "../utils/dom";
 
 
@@ -16,9 +16,12 @@ const [name, bem] = createNamespace('field');
 export const fieldSharedProps = {
   id: String,
   name: String,
+  maxlength: numericProp,
+  formatter: Function as PropType<(value: string) => string>, // 输入内容格式化函数
   modelValue: makeNumericProp(''),
   placeholder: String,
   errorMessage: String,
+  formatTrigger: makeStringProp<FieldFormatTrigger>('onChange'), // 触发格式化的方法
 }
 
 
@@ -42,6 +45,7 @@ export default defineComponent({
   name,
   props: fieldProps,
   emits: [
+    'blur',
     'endValidate',
     'startValidate',
     'update:modelValue',
@@ -59,6 +63,8 @@ export default defineComponent({
 
     // 内部通过 inject(FORM_KEY) 拿到 form 父组件注入的 props 参数 { link, unlink, children, internalChildren, ...props }。并且使用 link 方法将自身 instance 实例添加到 children, internalChildren 中
     const { parent: form } = useParent(FORM_KEY);
+
+    const getModelValue = () => String(props.modelValue ?? '');
 
     const getProp = (key) => {
       if (isDef(props[key])) {
@@ -160,6 +166,27 @@ export default defineComponent({
       })
     }
 
+    /** 监听事件触发 rules 规则校验 */
+    const validateWithTrigger = (trigger: FieldFormatTrigger) => {
+      if (form && props.rules) {
+        // validateTrigger: 表单校验触发时机, 默认 onBlur 失去焦点的时候
+        const { validateTrigger } = form.props
+        // 判断当前事件是否需要触发 "规则校验"
+        const defaultTrigger = toArray(validateTrigger).includes(trigger);
+        // 筛选出最终需要进行规则校验的 规则
+        const rules = props.rules.filter((rule) => {
+          if (rule.trigger) {
+            return toArray(rule.trigger).includes(trigger)
+          }
+          return defaultTrigger;
+        })
+        // 最终存在规则就进行规则校验
+        if (rules.length) {
+          validate(rules)
+        }
+      }
+    }
+
     const focus = () => inputRef.value?.focus();
 
 
@@ -218,6 +245,17 @@ export default defineComponent({
       trigger: FieldFormatTrigger = 'onChange',
     ) => {
 
+      // 存在 formatter 格式化函数, 并且当前修改满足 formatTrigger 格式化函数触发的时机(onBlur | onChange)
+      if (props.formatter && trigger === props.formatTrigger) {
+        const { formatter, maxlength } = props
+        value = formatter(value);
+
+        // 格式化后的长度可能超过 maxlength
+        if (isDef(maxlength) && getStringLength(value) > +maxlength) {
+          value = cutString(value, +maxlength);
+        }
+      }
+
 
       // 发射事件给外层的 v-model 接收
       if (value !== props.modelValue) {
@@ -230,6 +268,21 @@ export default defineComponent({
       if (!event.target!.composing) {
         updateValue((event.target as HTMLInputElement).value)
       }
+    }
+
+    const onBlur = (event: Event) => {
+      state.focused = false
+      updateValue(getModelValue(), 'onBlur');
+      emit('blur', event);
+
+      // 如果只读则直接 return 不需要执行下面逻辑
+      if (getProp('readonly')) {
+        return;
+      }
+
+
+      // 失去焦点时触发规则校验
+      validateWithTrigger('onBlur');
     }
 
     const renderInput = () => {
@@ -253,6 +306,7 @@ export default defineComponent({
         name: props.name,
         class: controlClass,
         placeholder: props.placeholder,
+        onBlur,
         onInput,
       }
 
@@ -271,6 +325,14 @@ export default defineComponent({
       validate,
       formValue,
     })
+
+    // 监听 输入框 变化重置校验状态
+    watch(
+      () => props.modelValue,
+      () => {
+        resetValidation();
+      }
+    )
 
 
     return () => {

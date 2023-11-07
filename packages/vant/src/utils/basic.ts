@@ -38,3 +38,8 @@ export function get(object: any, path: string): any {
 
   return result;
 }
+
+/** 字符串转数组 */
+export const toArray = <T>(item: T | T[]): T[] => {
+  return Array.isArray(item) ? item : [item];
+}
