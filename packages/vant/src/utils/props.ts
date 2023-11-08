@@ -1,5 +1,6 @@
 import type { PropType } from 'vue';
 
+/** 任意类型 */
 export const unknownProp = null as unknown as PropType<unknown>;
 
 /** 字符串或数字*/

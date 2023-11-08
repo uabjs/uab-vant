@@ -4,7 +4,7 @@ import { cdnURL, useTranslate } from '../../../docs/site';
 import VanForm from '..';
 import VanField from '../../field';
 import VanButton from '../../button';
-// import VanSwitch from '../../switch';
+import VanSwitch from '../../switch';
 import VanCellGroup from '../../cell-group';
 
 const t = useTranslate({
