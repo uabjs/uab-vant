@@ -6,6 +6,7 @@ import VanField from '../../field';
 import VanButton from '../../button';
 import VanSwitch from '../../switch';
 import VanCellGroup from '../../cell-group';
+import VanCheckbox from '../../checkbox';
 
 const t = useTranslate({
   'zh-CN': {
@@ -54,6 +55,12 @@ const onSubmit = (values: Record<string, string>) => {
         <van-field name="switch" :label="t('switch')">
           <template #input>
             <van-switch v-model="switchChecked" />
+          </template>
+        </van-field>
+
+        <van-field name="checkbox" :label="t('checkbox')">
+          <template #input>
+            <van-checkbox v-model="checkbox" shape="square" />
           </template>
         </van-field>
       </van-cell-group>
