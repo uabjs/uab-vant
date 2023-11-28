@@ -3,7 +3,7 @@ import { useCustomFieldValue, useParent } from "@vant/use";
 
 // Utils
 import { pick, createNamespace, extend, truthProp } from "../utils";
-// import { CHECKBOX_GROUP_KEY } from '../checkbox-group/CheckboxGroup';
+import { CHECKBOX_GROUP_KEY } from '../checkbox-group/CheckboxGroup';
 
 // Composables
 import { useExpose } from "../composables/use-expose";
@@ -37,7 +37,7 @@ export default defineComponent({
   emits: ['change', 'update:modelValue'],
 
   setup(props, { emit, slots }) {
-    const { parent } = useParent('CHECKBOX_GROUP_KEY');
+    const { parent } = useParent(CHECKBOX_GROUP_KEY);
 
     // 设置父级 van-checkbox-group 的值
     const setParentValue = (checked: boolean) => {

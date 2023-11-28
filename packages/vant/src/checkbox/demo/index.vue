@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import VanCheckbox from '..';
-// import VanCheckboxGroup from '../../checkbox-group';
+import VanCheckboxGroup from '../../checkbox-group';
 import VanButton from '../../button';
 import VanCellGroup from '../../cell-group';
 import VanCell from '../../cell';
@@ -8,7 +8,9 @@ import { ref, reactive } from 'vue';
 import { cdnURL, useTranslate } from '../../../docs/site';
 import { useRefs } from '../../composables/use-refs';
 import type { CheckboxInstance } from '../types';
-// import type { CheckboxGroupInstance } from '../../checkbox-group';
+import type { CheckboxGroupInstance } from '../../checkbox-group';
+
+
 const t = useTranslate({
   'zh-CN': {
     checkbox: '复选框',
@@ -70,7 +72,7 @@ const list = ['a', 'b', 'c', 'd'];
 const activeIcon = cdnURL('user-active.png');
 const inactiveIcon = cdnURL('user-inactive.png');
 
-// const group = ref<CheckboxGroupInstance>();
+const group = ref<CheckboxGroupInstance>();
 const [refs, setRefs] = useRefs<CheckboxInstance>();
 
 const toggle = (index: number) => {
@@ -81,6 +83,20 @@ const checkAll = () => {
   group.value?.toggleAll(true);
 };
 
+const toggleAll = () => {
+  group.value?.toggleAll();
+};
+
+const checkAllChange = (val: boolean) => {
+  state.result4 = val ? list : [];
+  state.isIndeterminate = false;
+};
+
+const checkedResultChange = (value: string[]) => {
+  const checkedCount = value.length;
+  state.isCheckAll = checkedCount === list.length;
+  state.isIndeterminate = checkedCount > 0 && checkedCount < list.length;
+};
 </script>
 
 <template>
@@ -137,6 +153,78 @@ const checkAll = () => {
     </van-checkbox>
   </demo-block>
 
+  <demo-block :title="t('title3')">
+    <van-checkbox-group v-model="state.result">
+      <van-checkbox name="a">{{ t('checkbox') }} a</van-checkbox>
+      <van-checkbox name="b">{{ t('checkbox') }} b</van-checkbox>
+    </van-checkbox-group>
+  </demo-block>
+
+  <demo-block :title="t('horizontal')">
+    <van-checkbox-group v-model="state.horizontalResult" direction="horizontal">
+      <van-checkbox name="a">{{ t('checkbox') }} a</van-checkbox>
+      <van-checkbox name="b">{{ t('checkbox') }} b</van-checkbox>
+    </van-checkbox-group>
+  </demo-block>
+
+  <demo-block :title="t('title4')">
+    <van-checkbox-group v-model="state.result2" :max="2">
+      <van-checkbox name="a">{{ t('checkbox') }} a</van-checkbox>
+      <van-checkbox name="b">{{ t('checkbox') }} b</van-checkbox>
+      <van-checkbox name="c">{{ t('checkbox') }} c</van-checkbox>
+    </van-checkbox-group>
+  </demo-block>
+
+  <demo-block :title="t('toggleAll')">
+    <van-checkbox-group v-model="state.checkAllResult" ref="group">
+      <van-checkbox name="a">{{ t('checkbox') }} a</van-checkbox>
+      <van-checkbox name="b">{{ t('checkbox') }} b</van-checkbox>
+      <van-checkbox name="c">{{ t('checkbox') }} c</van-checkbox>
+    </van-checkbox-group>
+
+    <div class="demo-checkbox-buttons">
+      <van-button type="primary" @click="checkAll">
+        {{ t('checkAll') }}
+      </van-button>
+      <van-button type="primary" @click="toggleAll">
+        {{ t('inverse') }}
+      </van-button>
+    </div>
+  </demo-block>
+
+  <demo-block :title="t('title5')">
+    <van-checkbox-group v-model="state.result3">
+      <van-cell-group inset>
+        <van-cell
+          v-for="(item, index) in state.list"
+          clickable
+          :key="index"
+          :title="`${t('checkbox')} ${item}`"
+          @click="toggle(index)"
+        >
+          <template #right-icon>
+            <van-checkbox :ref="setRefs(index)" :name="item" @click.stop />
+          </template>
+        </van-cell>
+      </van-cell-group>
+    </van-checkbox-group>
+  </demo-block>
+
+  <demo-block :title="t('indeterminate')">
+    <van-checkbox
+      v-model="state.isCheckAll"
+      :indeterminate="state.isIndeterminate"
+      @change="checkAllChange"
+    >
+      {{ t('checkAll') }}
+    </van-checkbox>
+    <div class="divider" />
+    <van-checkbox-group v-model="state.result4" @change="checkedResultChange">
+      <van-checkbox v-for="item in list" :key="item" :name="item">
+        {{ t('checkbox') }} {{ item }}
+      </van-checkbox>
+    </van-checkbox-group>
+  </demo-block>
 </template>
 
 
