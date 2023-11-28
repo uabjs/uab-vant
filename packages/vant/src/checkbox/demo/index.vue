@@ -6,7 +6,7 @@ import VanCellGroup from '../../cell-group';
 import VanCell from '../../cell';
 import { ref, reactive } from 'vue';
 import { cdnURL, useTranslate } from '../../../docs/site';
-// import { useRefs } from '../../composables/use-refs';
+import { useRefs } from '../../composables/use-refs';
 import type { CheckboxInstance } from '../types';
 // import type { CheckboxGroupInstance } from '../../checkbox-group';
 const t = useTranslate({
@@ -67,6 +67,19 @@ const state = reactive({
 
 const list = ['a', 'b', 'c', 'd'];
 
+const activeIcon = cdnURL('user-active.png');
+const inactiveIcon = cdnURL('user-inactive.png');
+
+// const group = ref<CheckboxGroupInstance>();
+const [refs, setRefs] = useRefs<CheckboxInstance>();
+
+const toggle = (index: number) => {
+  refs.value[index].toggle();
+};
+
+const checkAll = () => {
+  group.value?.toggleAll(true);
+};
 
 </script>
 
@@ -83,6 +96,47 @@ const list = ['a', 'b', 'c', 'd'];
       {{ t('checkbox') }}
     </van-checkbox>
   </demo-block>
+
+  <demo-block :title="t('customShape')">
+    <van-checkbox-group v-model="state.checkboxShape" shape="square">
+      <van-checkbox name="a">{{ t('customShape') }} a</van-checkbox>
+      <van-checkbox name="b">{{ t('customShape') }} b</van-checkbox>
+    </van-checkbox-group>
+  </demo-block>
+
+  <demo-block :title="t('customColor')">
+    <van-checkbox v-model="state.checkbox2" checked-color="#ee0a24">
+      {{ t('customColor') }}
+    </van-checkbox>
+  </demo-block>
+
+  <demo-block :title="t('customIconSize')">
+    <van-checkbox v-model="state.checkboxIcon" icon-size="24px">
+      {{ t('customIconSize') }}
+    </van-checkbox>
+  </demo-block>
+
+  <demo-block :title="t('customIcon')">
+    <van-checkbox v-model="state.checkbox3">
+      {{ t('customIcon') }}
+      <template #icon="{ checked }">
+        <img :src="checked ? activeIcon : inactiveIcon" />
+      </template>
+    </van-checkbox>
+  </demo-block>
+
+  <demo-block :title="t('leftLabel')">
+    <van-checkbox v-model="state.leftLabel" label-position="left">
+      {{ t('leftLabel') }}
+    </van-checkbox>
+  </demo-block>
+
+  <demo-block :title="t('disableLabel')">
+    <van-checkbox v-model="state.checkboxLabel" label-disabled>
+      {{ t('checkbox') }}
+    </van-checkbox>
+  </demo-block>
+
 </template>
 
 
