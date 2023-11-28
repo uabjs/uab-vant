@@ -43,3 +43,23 @@ export function get(object: any, path: string): any {
 export const toArray = <T>(item: T | T[]): T[] => {
   return Array.isArray(item) ? item : [item];
 }
+
+// 把只读属性变成可写
+export type Writeable<T> = { -readonly [P in keyof T]: T[P] }
+
+// 从对象中取出指定的属性
+export function pick<T, U extends keyof T>(
+  obj: T,
+  keys: ReadonlyArray<U>,
+  ignoreUndefined?: boolean, // 是否忽略 undefined, true: 忽略, false: 不忽略
+) {
+  return keys.reduce(
+    (ret, key) => {
+      if (!ignoreUndefined || obj[key] !== undefined) {
+        ret[key] = obj[key];
+      }
+      return ret;
+    },
+    {} as Writeable<Pick<T, U>>,
+  )
+}

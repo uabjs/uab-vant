@@ -79,6 +79,10 @@ export default {
             title: '表单组件',
             items: [
               {
+                path: 'checkbox',
+                title: 'Checkbox 复选框',
+              },
+              {
                 path: 'field',
                 title: 'Field 输入框',
               },
@@ -154,6 +158,10 @@ export default {
           {
             title: 'Form Components',
             items: [
+              {
+                path: 'checkbox',
+                title: 'Checkbox',
+              },
               {
                 path: 'field',
                 title: 'Field',

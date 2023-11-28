@@ -12,6 +12,11 @@ export const truthProp = {
   default: true as const,
 };
 
+export const makeRequiredProp = <T>(type: PropType<T>) => ({
+  type,
+  required: true as const,
+})
+
 export const makeStringProp = <T>(defaultVal: T) => ({
   type: String as unknown as PropType<T>,
   default: defaultVal,
