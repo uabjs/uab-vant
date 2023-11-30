@@ -3,7 +3,7 @@ import { useParent } from "@vant/use";
 
 import Cell, { cellSharedProps } from "../cell/Cell";
 import { createNamespace, extend, isDef, makeNumericProp, makeStringProp, numericProp, unknownProp, FORM_KEY, toArray } from "../utils";
-import { FieldExpose, FieldFormatTrigger, FieldRule, FieldTextAlign, FieldType, FieldValidateError, FieldValidationStatus } from "./types";
+import { FieldExpose, FieldFormSharedProps, FieldFormatTrigger, FieldRule, FieldTextAlign, FieldType, FieldValidateError, FieldValidationStatus } from "./types";
 import { useExpose } from '../composables/use-expose';
 import { userId } from "../composables/use-id";
 import { mapInputType, isEmptyValue, runSyncRule, getRuleMessage, runRuleValidator, getStringLength, cutString } from "./utils";
@@ -66,9 +66,12 @@ export default defineComponent({
 
     const getModelValue = () => String(props.modelValue ?? '');
 
-    const getProp = (key) => {
+    const getProp = <T extends FieldFormSharedProps>(key: T) => {
       if (isDef(props[key])) {
         return props[key]
+      }
+      if (form && isDef(form.props[key])) {
+        return form.props[key];
       }
     }
 

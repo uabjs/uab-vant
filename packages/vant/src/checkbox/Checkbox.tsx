@@ -109,7 +109,7 @@ export default defineComponent({
     // 将数据暴露在实例上 - 供外部调用 {toggle: 切换选中状态, props: 参数数据, checked: 是否选中 }
     useExpose<CheckboxExpose>({ toggle, props, checked })
 
-    // 暴露给外层 form 组件的数据
+    // 暴露给外层 field 组件的 customValue 方法内使用
     useCustomFieldValue(() => props.modelValue);
     
     return () => (

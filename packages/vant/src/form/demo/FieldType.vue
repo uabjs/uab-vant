@@ -7,6 +7,7 @@ import VanButton from '../../button';
 import VanSwitch from '../../switch';
 import VanCellGroup from '../../cell-group';
 import VanCheckbox from '../../checkbox';
+import VanCheckboxGroup from '../../checkbox-group';
 
 const t = useTranslate({
   'zh-CN': {
@@ -39,6 +40,13 @@ const t = useTranslate({
   },
 });
 
+const rate = ref(3);
+const radio = ref('1');
+const slider = ref(50);
+const stepper = ref(1);
+const uploader = ref([{ url: cdnURL('leaf.jpeg') }]);
+const checkbox = ref(false);
+const checkboxGroup = ref([]);
 const switchChecked = ref(false);
 
 
@@ -63,6 +71,21 @@ const onSubmit = (values: Record<string, string>) => {
             <van-checkbox v-model="checkbox" shape="square" />
           </template>
         </van-field>
+
+        <van-field name="checkboxGroup" :label="t('checkboxGroup')">
+          <template #input>
+            <van-checkbox-group v-model="checkboxGroup" direction="horizontal">
+              <van-checkbox name="1" shape="square">
+                {{ t('checkbox') }} 1
+              </van-checkbox>
+              <van-checkbox name="2" shape="square">
+                {{ t('checkbox') }} 2
+              </van-checkbox>
+            </van-checkbox-group>
+          </template>
+        </van-field>
+
+        
       </van-cell-group>
 
       <div style="margin: 16px 16px 0">

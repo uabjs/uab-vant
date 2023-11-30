@@ -81,7 +81,8 @@ export default defineComponent({
     );
 
     useExpose<CheckboxGroupExpose>({ toggleAll });
-    // 提供给 Field 组件的数据
+
+    // 暴露给外层 field 组件的 customValue 方法内使用
     useCustomFieldValue(() => props.modelValue);
     
     // 注入 props 与 updateValue 方法给子组件
