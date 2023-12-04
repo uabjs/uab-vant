@@ -10,7 +10,7 @@ export default {
       esm: '.mjs',
     },
     site: {
-      publicPath: '/vant/',
+      publicPath: '/',
     },
     vetur: {
       tagPrefix: 'van-',

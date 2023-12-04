@@ -10,7 +10,7 @@ import {
 
 import { HAPTICS_FEEDBACK, Numeric, addNumber, addUnit, createNamespace, formatNumber, getSizeStyle, isDef, makeNumericProp, numericProp, preventDefault, resetScroll, truthProp } from "../utils";
 import { useCustomFieldValue } from "@vant/use";
-import { callInterceptor } from "../utils/interceptor";
+import { Interceptor, callInterceptor } from "../utils/interceptor";
 
 
 const [name, bem] = createNamespace('stepper');
@@ -44,7 +44,7 @@ export const stepperProps = {
   disablePlus: Boolean, // 禁用加号按钮
   disableMinus: Boolean, // 禁用减号按钮
   disableInput: Boolean, // 禁用输入框
-  beforeChange: Function as PropType<(value: Numeric) => boolean>, // 输入值变化前的回调函数
+  beforeChange: Function as PropType<Interceptor>, // 输入值变化前的回调函数
   defaultValue: makeNumericProp(1), // 默认值
   decimalLength: numericProp, // 保留固定的小数位数
 }
