@@ -94,6 +94,10 @@ export default {
                 path: 'radio',
                 title: 'Radio 单选框',
               },
+              {
+                path: 'stepper',
+                title: 'Stepper 步进器',
+              },
             ]
           },
           {
@@ -177,6 +181,10 @@ export default {
               {
                 path: 'radio',
                 title: 'Radio',
+              },
+              {
+                path: 'stepper',
+                title: 'Stepper',
               },
             ]
           },
