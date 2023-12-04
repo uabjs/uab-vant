@@ -301,7 +301,10 @@ export default defineComponent({
     });
 
     // 将获取当前 v-model 值的函数传递给上层的 Field 组件
-    useCustomFieldValue(() => props.modelValue);
+    useCustomFieldValue(() => {
+      console.log("props.modelValue====11== ", props.modelValue)
+      return props.modelValue
+    });
 
     return () => (
       <div

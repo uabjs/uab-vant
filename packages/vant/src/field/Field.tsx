@@ -1,9 +1,9 @@
-import { ExtractPropTypes, defineComponent, type PropType, ref, computed, reactive, watch } from "vue";
-import { useParent } from "@vant/use";
+import { ExtractPropTypes, defineComponent, type PropType, ref, computed, reactive, watch, provide } from "vue";
+import { CUSTOM_FIELD_INJECTION_KEY, useParent } from "@vant/use";
 
 import Cell, { cellSharedProps } from "../cell/Cell";
 import { createNamespace, extend, isDef, makeNumericProp, makeStringProp, numericProp, unknownProp, FORM_KEY, toArray } from "../utils";
-import { FieldExpose, FieldFormSharedProps, FieldFormatTrigger, FieldRule, FieldTextAlign, FieldType, FieldValidateError, FieldValidationStatus } from "./types";
+import { FieldExpose, FieldFormSharedProps, FieldFormatTrigger, FieldRule, FieldTextAlign, FieldType, FieldValidateError, FieldValidateTrigger, FieldValidationStatus } from "./types";
 import { useExpose } from '../composables/use-expose';
 import { userId } from "../composables/use-id";
 import { mapInputType, isEmptyValue, runSyncRule, getRuleMessage, runRuleValidator, getStringLength, cutString } from "./utils";
@@ -60,6 +60,7 @@ export default defineComponent({
     })
     
     const inputRef = ref<HTMLInputElement>();
+    const customValue = ref<() => unknown>();
 
     // 内部通过 inject(FORM_KEY) 拿到 form 父组件注入的 props 参数 { link, unlink, children, internalChildren, ...props }。并且使用 link 方法将自身 instance 实例添加到 children, internalChildren 中
     const { parent: form } = useParent(FORM_KEY);
@@ -76,6 +77,9 @@ export default defineComponent({
     }
 
     const formValue = computed(() => {
+      if (customValue.value && slots.input) {
+        return customValue.value();
+      }
       return props.modelValue;
     })
 
@@ -170,7 +174,7 @@ export default defineComponent({
     }
 
     /** 监听事件触发 rules 规则校验 */
-    const validateWithTrigger = (trigger: FieldFormatTrigger) => {
+    const validateWithTrigger = (trigger: FieldValidateTrigger) => {
       if (form && props.rules) {
         // validateTrigger: 表单校验触发时机, 默认 onBlur 失去焦点的时候
         const { validateTrigger } = form.props
@@ -327,6 +331,12 @@ export default defineComponent({
     useExpose<FieldExpose>({
       validate,
       formValue,
+    })
+
+    provide(CUSTOM_FIELD_INJECTION_KEY, {
+      customValue,
+      resetValidation,
+      validateWithTrigger,
     })
 
     // 监听 输入框 变化重置校验状态
