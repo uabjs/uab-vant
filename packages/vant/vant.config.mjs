@@ -90,6 +90,10 @@ export default {
                 path: 'form',
                 title: 'Form 表单',
               },
+              {
+                path: 'radio',
+                title: 'Radio 单选框',
+              },
             ]
           },
           {
@@ -169,6 +173,10 @@ export default {
               {
                 path: 'form',
                 title: 'Form',
+              },
+              {
+                path: 'radio',
+                title: 'Radio',
               },
             ]
           },
