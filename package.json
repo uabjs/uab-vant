@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --dir ./packages/vant dev",
-    "build": "pnpm --dir ./packages/vant build"
+    "build": "pnpm --dir ./packages/vant build",
+    "build:site": "pnpm --dir ./packages/vant build:site"
   },
   "engines": {
     "pnpm": ">= 8.8.0"
