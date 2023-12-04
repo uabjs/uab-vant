@@ -6,8 +6,12 @@ import VanField from '../../field';
 import VanButton from '../../button';
 import VanSwitch from '../../switch';
 import VanCellGroup from '../../cell-group';
+import VanRadio from '../../radio';
+import VanRadioGroup from '../../radio-group';
 import VanCheckbox from '../../checkbox';
 import VanCheckboxGroup from '../../checkbox-group';
+import VanStepper from '../../stepper';
+
 
 const t = useTranslate({
   'zh-CN': {
@@ -85,6 +89,20 @@ const onSubmit = (values: Record<string, string>) => {
           </template>
         </van-field>
 
+        <van-field name="radio" :label="t('radio')">
+          <template #input>
+            <van-radio-group v-model="radio" direction="horizontal">
+              <van-radio name="1">{{ t('radio') }} 1</van-radio>
+              <van-radio name="2">{{ t('radio') }} 2</van-radio>
+            </van-radio-group>
+          </template>
+        </van-field>
+
+        <van-field name="stepper" :label="t('stepper')">
+          <template #input>
+            <van-stepper v-model="stepper" />
+          </template>
+        </van-field>
         
       </van-cell-group>
 
