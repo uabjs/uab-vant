@@ -1,9 +1,14 @@
+
+/** 空函数 */
+export function noop() {}
+
 // 基本的方法
 export const extend = Object.assign;
 
 /** 是浏览器 */
 export const inBrowser = typeof window !== 'undefined';
 
+/** 数字 或 字符串 */
 export type Numeric = number | string;
 
 /** 是数字 */
@@ -26,6 +31,11 @@ export const isFunction = (val: unknown): val is Function => typeof val === 'fun
 export const isPromise = <T = any>(val: unknown): val is Promise<T> =>
   isObject(val) && isFunction(val.then) && isFunction(val.catch)
 
+
+export const isIOS = (): boolean =>
+  inBrowser
+    ? /ios|iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase())
+    : false;
 
 /** 取对象深处的某个值，不报错 */
 export function get(object: any, path: string): any {
