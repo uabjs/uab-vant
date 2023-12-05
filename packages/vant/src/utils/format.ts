@@ -82,3 +82,12 @@ export function addNumber(num1: number, num2: number) {
   const cardinal = 10 ** 10;
   return Math.round((num1 + num2) * cardinal) / cardinal;
 }
+
+/** z-index 样式可以是 字符串 ｜ 数字 */
+export function getZIndexStyle(zIndex?: Numeric) {
+  const style: CSSProperties = {};
+  if (zIndex !== undefined) {
+    style.zIndex = +zIndex;
+  }
+  return style;
+}

@@ -2,7 +2,7 @@
 /** 空函数 */
 export function noop() {}
 
-// 基本的方法
+/** Object.assign 继承 */
 export const extend = Object.assign;
 
 /** 是浏览器 */

@@ -1,6 +1,7 @@
 import { noop, isPromise } from './basic';
 
 
+/** 拦截器函数 返回 boolean ｜ Promise ｜ undefined  */
 export type Interceptor = (...args: any[]) => boolean | Promise<boolean> | undefined;
 
 
