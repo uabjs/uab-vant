@@ -101,6 +101,15 @@ export default {
             ]
           },
           {
+            title: '反馈组件',
+            items: [
+              {
+                path: 'overlay',
+                title: 'Overlay 遮罩层',
+              },
+            ]
+          },
+          {
             title: '展示组件',
             items: [
               {
@@ -185,6 +194,15 @@ export default {
               {
                 path: 'stepper',
                 title: 'Stepper',
+              },
+            ]
+          },
+          {
+            title: 'Action Components',
+            items: [
+              {
+                path: 'overlay',
+                title: 'Overlay',
               },
             ]
           },
