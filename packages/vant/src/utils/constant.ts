@@ -12,3 +12,6 @@ export const HAPTICS_FEEDBACK = 'van-haptics-feedback';
 
 /** 组件 inject 注入的表单 Symbol */
 export const FORM_KEY: InjectionKey<FormProvide> = Symbol('van-form');
+
+/** 偏移量 */
+export const TAP_OFFSET = 5;

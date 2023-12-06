@@ -70,6 +70,10 @@ export default {
                 title: 'Icon 图标',
               },
               {
+                path: 'popup',
+                title: 'Popup 弹出层',
+              },
+              {
                 path: 'style',
                 title: 'Style 内置样式',
               },
@@ -165,6 +169,10 @@ export default {
               {
                 path: 'icon',
                 title: 'Icon',
+              },
+              {
+                path: 'popup',
+                title: 'Popup',
               },
               {
                 path: 'style',

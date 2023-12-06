@@ -4,7 +4,7 @@ import { noop, isPromise } from './basic';
 /** 拦截器函数 返回 boolean ｜ Promise ｜ undefined  */
 export type Interceptor = (...args: any[]) => boolean | Promise<boolean> | undefined;
 
-
+/** 拦截器, 执行传入回调返回成功后执行 done 方法 */
 export function callInterceptor(
   interceptor: Interceptor | undefined,
   {
