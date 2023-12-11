@@ -1,0 +1,36 @@
+
+
+// 逐渐显示
+@keyframes van-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+// 逐渐隐藏
+@keyframes van-fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.van-fade {
+  // 进入活动状态, Transition 组件会在元素插入时添加 -enter-active 类名
+  &-enter-active {
+    // 使用动画： 动画延迟时间             淡入动画帧   both开始之前和结束之后将应用动画效果   ease-out淡出效果
+    animation: var(--van-duration-base) van-fade-in both var(--van-ease-out);
+  }
+
+  // 离开活动状态, Transition 组件会在元素删除时添加 -leave-active 类名
+  &-leave-active {
+    animation: var(--van-duration-base) van-fade-out both var(--van-ease-in);
+  }
+}
