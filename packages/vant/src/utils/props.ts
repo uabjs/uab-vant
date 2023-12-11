@@ -28,6 +28,13 @@ export const makeStringProp = <T>(defaultVal: T) => ({
   default: defaultVal,
 })
 
+/** 数字类型 */
+export const makeNumberProp = <T>(defaultVal: T) => ({
+  type: Number,
+  default: defaultVal,
+});
+
+/** 数字 或 字符串 类型 */
 export const makeNumericProp = <T>(defaultVal: T) => ({
   type: numericProp,
   default: defaultVal
