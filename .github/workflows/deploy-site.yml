@@ -1,0 +1,64 @@
+name: Deploy Site
+
+on:
+  push:
+    branches: [main] # 触发当前事件分支
+    paths:
+      - 'packages/vant/docs/**' # 触发当前事件路径
+
+  workflow_dispatch:
+
+# 定义了一个或多个 jobs（工作）
+jobs:
+  # 定义了一个名为 build-and-deploy 的 job
+  build-and-deploy:
+    # 定义了 job 的运行环境
+    runs-on: ubuntu-latest
+    # 定义了 job 的执行步骤
+    steps:
+      # 检出代码
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+        with:
+          ref: 'main'
+
+      # 启用 Corepack 来安装 pnpm。Corepack 是一种用于 Node.js 生态系统的包管理器。
+      - name: Install pnpm
+        run: corepack enable
+  
+      # 设置 node 版本
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      # 安装依赖
+      - name: Install dependencies
+        run: pnpm install
+      
+      # 打包构建站点 
+      - name: Build Site
+        run: npm run build:site
+
+      # 部署站点
+      - name: Deploy for Gitee 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
+        with:
+          branch: gh-pages # 部署到 gh-pages 分支
+          folder: packages/vant/site-dist # 部署的文件夹
+          # 启用 single-commit 以减少回购规模
+          single-commit: true # 单次提交
+          clean: true # 清理
+
+      # 部署站点
+      - name: Deploy for GitHub 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
+        with:
+          branch: main # 部署到 main 分支
+          folder: packages/vant/site-dist # 部署的文件夹
+          token: ${{ secrets.VANT_UI_TOKEN }} # GitHub Token
+          repository-name: vant-ui/vant-ui.github.io # 仓库名称
+          target-folder: vant # 部署的文件夹
+          # 启用 single-commit 以减少回购规模
+          single-commit: true # 单次提交
+          clean: true # 清理
