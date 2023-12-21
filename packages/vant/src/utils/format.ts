@@ -91,3 +91,10 @@ export function getZIndexStyle(zIndex?: Numeric) {
   }
   return style;
 }
+
+/** 将 'buttonMiniHeight' 转换成 'button-mini-height'  */
+export const kebabCase = (str: string) =>
+  str
+    .replace(/([A-Z])/g, '-$1')
+    .toLowerCase()
+    .replace(/^-/, '');

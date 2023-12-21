@@ -1,5 +1,5 @@
 type BaseThemeVars = {
-  // Color Palette
+  // 调色板
   black?: string;
   white?: string;
   gray1?: string;
@@ -17,11 +17,11 @@ type BaseThemeVars = {
   orangeLight?: string;
   green?: string;
 
-  // Gradient Colors
+  // 渐变色
   gradientRed?: string;
   gradientOrange?: string;
 
-  // Component Colors
+  // 组件颜色
   primaryColor?: string;
   successColor?: string;
   dangerColor?: string;
@@ -43,7 +43,7 @@ type BaseThemeVars = {
   paddingLg?: string;
   paddingXl?: string;
 
-  // Font
+  // 字体
   fontSizeXs?: string;
   fontSizeSm?: string;
   fontSizeMd?: string;
@@ -56,7 +56,7 @@ type BaseThemeVars = {
   baseFont?: string;
   priceFont?: string;
 
-  // Animation
+  // 动画
   durationBase?: string;
   durationFast?: string;
   easeOut?: string;
