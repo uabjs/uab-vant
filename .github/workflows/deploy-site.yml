@@ -4,7 +4,7 @@ on:
   push:
     branches: [main] # 触发当前事件分支
     paths:
-      - 'packages/vant/**' # 触发当前事件路径
+      - 'packages/**' # 触发当前事件路径
 
   workflow_dispatch:
 
@@ -41,24 +41,11 @@ jobs:
         run: npm run build:site
 
       # 部署站点
-      - name: Deploy for Gitee 🚀
+      - name: Deploy for GitHub 🚀
         uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
           branch: gh-pages # 部署到 gh-pages 分支
           folder: packages/vant/site-dist # 部署的文件夹
-          # 启用 single-commit 以减少回购规模
-          single-commit: true # 单次提交
-          clean: true # 清理
-
-      # 部署站点
-      - name: Deploy for GitHub 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.4.1
-        with:
-          branch: main # 部署到 main 分支
-          folder: packages/vant/site-dist # 部署的文件夹
-          token: ${{ secrets.VANT_UI_TOKEN }} # GitHub Token
-          repository-name: vant-ui/vant-ui.github.io # 仓库名称
-          target-folder: vant # 部署的文件夹
           # 启用 single-commit 以减少回购规模
           single-commit: true # 单次提交
           clean: true # 清理

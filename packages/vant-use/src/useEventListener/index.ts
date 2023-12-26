@@ -46,7 +46,7 @@ export function useEventListener(
   let attached: boolean; // 是否已经添加了事件侦听器
 
   /** 添加监听 */
-  const add = (target: TargetRef) => {
+  const add = (target?: TargetRef) => {
     if (cleaned) {
       return;
     }
