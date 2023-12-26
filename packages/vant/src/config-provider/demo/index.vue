@@ -33,7 +33,6 @@ const t = useTranslate({
   },
 });
 
-
 const rate = ref(4);
 const slider = ref(50);
 const themeVars = {
