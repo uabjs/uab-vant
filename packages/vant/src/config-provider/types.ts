@@ -71,6 +71,7 @@ type BaseThemeVars = {
   radiusMax?: string;
 };
 
+/** 配置主题的所有变量 */
 export type ConfigProviderThemeVars = BaseThemeVars &
   import('../badge').BadgeThemeVars &
   import('../button').ButtonThemeVars;
