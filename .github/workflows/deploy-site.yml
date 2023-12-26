@@ -4,7 +4,7 @@ on:
   push:
     branches: [main] # 触发当前事件分支
     paths:
-      - 'packages/vant/docs/**' # 触发当前事件路径
+      - 'packages/vant/**' # 触发当前事件路径
 
   workflow_dispatch:
 
